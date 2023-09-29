@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ENDPOINT_MS_USER } from 'react-native-dotenv';
 
 export default function App() {
   const [email, setEmail] = useState('diego.ramirez@ce.ucn.cl');
@@ -13,11 +14,13 @@ export default function App() {
     setError(false);
     setAccessToken('');
 
+    console.log({ ENDPOINT_MS_USER });
+
     try {
-      const response = await axios.post(
-        'http://192.168.42.128:3000/user/sign-in',
-        { email, password }
-      );
+      const response = await axios.post(`${ENDPOINT_MS_USER}/sign-in`, {
+        email,
+        password,
+      });
 
       const accessToken = response?.data?.accessToken || '';
       setAccessToken(accessToken);
