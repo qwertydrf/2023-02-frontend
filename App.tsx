@@ -2,19 +2,17 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ENDPOINT_MS_USER } from 'react-native-dotenv';
+import { useUserStore } from './stores/useUserStore';
 
 export default function App() {
   const [email, setEmail] = useState('diego.ramirez@ce.ucn.cl');
   const [password, setPassword] = useState('12345');
-  const [accessToken, setAccessToken] = useState('');
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const { accessToken, setAccessToken } = useUserStore();
 
   const signInRequest = async (email: string, password: string) => {
     setError(false);
-    setAccessToken('');
-
-    console.log({ ENDPOINT_MS_USER });
 
     try {
       const response = await axios.post(`${ENDPOINT_MS_USER}/sign-in`, {
@@ -24,7 +22,6 @@ export default function App() {
 
       const accessToken = response?.data?.accessToken || '';
       setAccessToken(accessToken);
-      console.log({ accessToken });
     } catch (e: any) {
       setError(true);
       setErrorMessage(e?.response?.data?.message);
